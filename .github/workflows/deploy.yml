@@ -1,0 +1,33 @@
+name: Deploy to Docker Swarm
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout du code
+        uses: actions/checkout@v3
+
+      - name: Configurer SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan ${{ secrets.MANAGER_IP }} >> ~/.ssh/known_hosts
+
+      - name: Déployer sur le Swarm
+        run: |
+          ssh ${{ secrets.MANAGER_USER }}@${{ secrets.MANAGER_IP }} \
+            "cd ~/stacks && \
+             docker stack deploy -c web.yml web && \
+             docker stack deploy -c mariadb.yml mariadb"
+
+      - name: Vérifier le déploiement
+        run: |
+          ssh ${{ secrets.MANAGER_USER }}@${{ secrets.MANAGER_IP }} \
+            "docker service ls"
