@@ -103,5 +103,5 @@ fi
 echo "========================================"
 echo ""
 
-echo "📊 État final du service :"
+echo " État final du service :"
 docker service ps "$SERVICE"
