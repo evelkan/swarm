@@ -25,12 +25,12 @@ echo ""
 
 # Vérifier qu'on est sur le manager
 if ! docker node ls &>/dev/null; then
-    echo "❌ Ce script doit être exécuté sur le manager Swarm."
+    echo " Ce script doit être exécuté sur le manager Swarm."
     exit 1
 fi
 
 # État initial
-echo "📊 État initial du service :"
+echo " État initial du service :"
 docker service ps "$SERVICE" --no-trunc | head -5
 echo ""
 
@@ -40,29 +40,29 @@ NODE=$(echo "$CONTAINER_INFO" | awk '{print $1}')
 CONTAINER_NAME=$(echo "$CONTAINER_INFO" | awk '{print $2}')
 
 if [ -z "$NODE" ]; then
-    echo "❌ Aucun conteneur $SERVICE en cours d'exécution."
+    echo "Aucun conteneur $SERVICE en cours d'exécution."
     exit 1
 fi
 
-echo "🎯 Conteneur cible : $CONTAINER_NAME sur $NODE"
+echo " Conteneur cible : $CONTAINER_NAME sur $NODE"
 echo ""
 
 # Enregistrer l'heure de la panne
 TIME_START=$(date '+%H:%M:%S')
 TS_START=$(date +%s)
 
-echo "💥 Simulation de la panne à $TIME_START..."
+echo " Simulation de la panne à $TIME_START..."
 echo "   Commande à exécuter SUR $NODE :"
 echo ""
 echo "   docker ps | grep nginx"
 echo "   docker rm -f <ID_CONTENEUR>"
 echo ""
-echo "⚠️  Exécutez ces commandes manuellement sur $NODE dans un autre terminal."
+echo " Exécutez ces commandes manuellement sur $NODE dans un autre terminal."
 echo "   Appuyez sur Entrée ici quand c'est fait..."
 read -r
 
 echo ""
-echo "👁️  Surveillance de la reprise (toutes les ${WATCH_INTERVAL}s, timeout ${TIMEOUT}s)..."
+echo " Surveillance de la reprise (toutes les ${WATCH_INTERVAL}s, timeout ${TIMEOUT}s)..."
 echo ""
 
 RECOVERED=false
@@ -90,14 +90,14 @@ echo ""
 echo ""
 echo "========================================"
 if [ "$RECOVERED" = true ]; then
-    echo "✅ Service rétabli automatiquement !"
+    echo " Service rétabli automatiquement !"
     echo ""
     echo "   Heure de la panne  : $TIME_START"
     echo "   Heure de reprise   : $TIME_END"
     echo "   RTO mesuré         : ~${RTO} secondes"
     echo "   Action Swarm       : Redémarrage automatique"
 else
-    echo "⚠️  Timeout dépassé — vérifier manuellement :"
+    echo " Timeout dépassé — vérifier manuellement :"
     echo "   docker service ps $SERVICE"
 fi
 echo "========================================"
