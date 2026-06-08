@@ -24,18 +24,18 @@ echo "========================================"
 echo ""
 
 # Trouver le conteneur MariaDB en cours d'exécution
-echo "🔍 Recherche du conteneur MariaDB..."
+echo " Recherche du conteneur MariaDB..."
 
 CONTAINER_INFO=$(docker service ps "$SERVICE" --filter "desired-state=running" --format "{{.Node}} {{.Name}}.{{.ID}}" | head -1)
 NODE=$(echo "$CONTAINER_INFO" | awk '{print $1}')
 
 if [ -z "$NODE" ]; then
-    echo "❌ Aucun conteneur MariaDB en cours d'exécution."
+    echo "Aucun conteneur MariaDB en cours d'exécution."
     echo "   Vérifier : docker service ps $SERVICE"
     exit 1
 fi
 
-echo "   ✅ MariaDB tourne sur : $NODE"
+echo "    MariaDB tourne sur : $NODE"
 echo ""
 
 # ── PHASE 1 : Insertion des données ──────────────────────────────────────────
@@ -56,7 +56,7 @@ read -r
 
 # ── PHASE 2 : Kill du conteneur ───────────────────────────────────────────────
 echo ""
-echo "💥 PHASE 2 — Suppression du conteneur MariaDB"
+echo " PHASE 2 — Suppression du conteneur MariaDB"
 echo "   Exécutez sur $NODE :"
 echo ""
 echo "   CONTAINER_ID=\$(docker ps | grep mariadb | awk '{print \$1}')"
@@ -70,7 +70,7 @@ TS_START=$(date +%s)
 
 # ── PHASE 3 : Surveillance redémarrage ───────────────────────────────────────
 echo ""
-echo "👁️  PHASE 3 — Surveillance du redémarrage automatique..."
+echo " PHASE 3 — Surveillance du redémarrage automatique..."
 
 TIMEOUT=120
 ELAPSED=0
@@ -95,11 +95,11 @@ done
 echo ""
 
 if [ "$RECOVERED" = false ]; then
-    echo "⚠️  Timeout — vérifier manuellement : docker service ps $SERVICE"
+    echo "  Timeout — vérifier manuellement : docker service ps $SERVICE"
     exit 1
 fi
 
-echo "   ✅ Conteneur redémarré en ~${RTO}s"
+echo "   Conteneur redémarré en ~${RTO}s"
 echo ""
 
 # ── PHASE 4 : Vérification des données ───────────────────────────────────────
@@ -132,5 +132,5 @@ echo "   Heure de reprise       : $TIME_UP"
 echo "   RTO mesuré             : ~${RTO} secondes"
 echo "   Données insérées       : 1 ligne — 'donnee persistante'"
 echo "   Mécanisme              : Stockage NFS persistant"
-echo "   Résultat               : ✅ Persistance des données validée"
+echo "   Résultat               :  Persistance des données validée"
 echo "========================================"
