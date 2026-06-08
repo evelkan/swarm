@@ -2,7 +2,7 @@
 # =============================================================================
 # deploy-all.sh — Déploiement de toutes les stacks Docker Swarm
 # =============================================================================
-# ⚠️  À exécuter UNIQUEMENT sur swarm-manager
+#  À exécuter UNIQUEMENT sur swarm-manager
 #
 # Prérequis :
 #   - Swarm initialisé (init-manager.sh exécuté)
@@ -26,37 +26,37 @@ echo "🔍 Vérifications préalables..."
 # Swarm actif ?
 SWARM_STATE=$(docker info --format '{{.Swarm.LocalNodeState}}' 2>/dev/null)
 if [ "$SWARM_STATE" != "active" ]; then
-    echo "❌ Ce nœud n'est pas dans un Swarm. Exécutez d'abord init-manager.sh"
+    echo " Ce nœud n'est pas dans un Swarm. Exécutez d'abord init-manager.sh"
     exit 1
 fi
-echo "   ✅ Swarm actif"
+echo "    Swarm actif"
 
 # NFS monté ?
 if ! mountpoint -q "$NFS_BASE"; then
-    echo "❌ NFS non monté sur $NFS_BASE. Exécutez d'abord mount-nfs-client.sh"
+    echo " NFS non monté sur $NFS_BASE. Exécutez d'abord mount-nfs-client.sh"
     exit 1
 fi
-echo "   ✅ NFS monté"
+echo "    NFS monté"
 
 # Nombre de workers ?
 WORKERS=$(docker node ls --filter "role=worker" --format "{{.Status}}" | grep -c "Ready" || true)
-echo "   ✅ Workers Ready : $WORKERS"
+echo "    Workers Ready : $WORKERS"
 
 echo ""
 
 # ── Préparer les fichiers sur le NFS ──────────────────────────────────────────
-echo "📁 Préparation des fichiers NFS..."
+echo " Préparation des fichiers NFS..."
 
 # Page PHP de test
 if [ ! -f "$NFS_BASE/html/index.php" ]; then
     echo '<?php phpinfo(); ?>' | sudo tee "$NFS_BASE/html/index.php" > /dev/null
-    echo "   ✅ index.php créé"
+    echo "   index.php créé"
 fi
 
 # Config Nginx
 if [ ! -f "$NFS_BASE/nginx/default.conf" ]; then
     sudo cp "$STACKS_DIR/nginx-default.conf" "$NFS_BASE/nginx/default.conf"
-    echo "   ✅ nginx default.conf copié"
+    echo "   nginx default.conf copié"
 fi
 
 echo ""
@@ -65,9 +65,9 @@ echo ""
 deploy_stack() {
     local NAME="$1"
     local FILE="$2"
-    echo "🚀 Déploiement de la stack : $NAME"
+    echo " Déploiement de la stack : $NAME"
     docker stack deploy -c "$FILE" "$NAME"
-    echo "   ✅ $NAME déployée"
+    echo "   $NAME déployée"
     echo ""
 }
 
@@ -83,7 +83,7 @@ sleep 5
 deploy_stack "vscode"   "$STACKS_DIR/vscode.yml"
 
 # ── Résumé ─────────────────────────────────────────────────────────────────────
-echo "⏳ Attente du démarrage des services (30s)..."
+echo " Attente du démarrage des services (30s)..."
 sleep 30
 
 echo ""
@@ -93,7 +93,7 @@ echo "========================================"
 docker service ls
 
 echo ""
-echo "📋 Accès aux services :"
+echo " Accès aux services :"
 echo "   Registry    → http://192.168.56.10:5000"
 echo "   Nginx/PHP   → http://192.168.56.10"
 echo "   VSCode      → http://192.168.56.11:8080  (mdp: vscode123)"
