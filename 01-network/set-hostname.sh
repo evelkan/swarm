@@ -9,7 +9,7 @@
 set -e
 
 if [ -z "$1" ]; then
-    echo "❌ Usage : sudo bash set-hostname.sh <hostname>"
+    echo " Usage : sudo bash set-hostname.sh <hostname>"
     echo "   Valeurs possibles : swarm-manager | swarm-worker1 | swarm-worker2 | swarm-worker3 | swarm-nfs"
     exit 1
 fi
@@ -22,5 +22,5 @@ sudo hostnamectl set-hostname "$NEW_HOSTNAME"
 # Mettre à jour /etc/hostname
 echo "$NEW_HOSTNAME" | sudo tee /etc/hostname > /dev/null
 
-echo "✅ Hostname défini : $(hostname)"
-echo "ℹ️  Reconnectez-vous pour que le prompt soit mis à jour."
+echo " Hostname défini : $(hostname)"
+echo " Reconnectez-vous pour que le prompt soit mis à jour."
