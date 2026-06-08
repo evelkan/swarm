@@ -10,7 +10,7 @@ set -e
 
 DAEMON_FILE="/etc/docker/daemon.json"
 
-echo "🔧 Configuration du daemon Docker (désactivation IPv6)..."
+echo " Configuration du daemon Docker (désactivation IPv6)..."
 
 # Créer ou remplacer le fichier de configuration
 sudo tee "$DAEMON_FILE" > /dev/null << 'EOF'
@@ -19,16 +19,16 @@ sudo tee "$DAEMON_FILE" > /dev/null << 'EOF'
 }
 EOF
 
-echo "✅ $DAEMON_FILE créé."
+echo " $DAEMON_FILE créé."
 
 # Redémarrer Docker
-echo "🔄 Redémarrage de Docker..."
+echo " Redémarrage de Docker..."
 sudo systemctl restart docker
 sudo systemctl status docker --no-pager | grep "Active:"
 
 echo ""
-echo "🧪 Test de fonctionnement (docker run hello-world)..."
+echo " Test de fonctionnement (docker run hello-world)..."
 docker run --rm hello-world
 
 echo ""
-echo "✅ Docker fonctionne correctement en IPv4 !"
+echo " Docker fonctionne correctement en IPv4 !"
