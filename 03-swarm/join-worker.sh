@@ -2,7 +2,7 @@
 # =============================================================================
 # join-worker.sh — Jonction d'un worker au cluster Swarm
 # =============================================================================
-# ⚠️  À exécuter sur chaque worker : swarm-worker1, worker2, worker3
+#   À exécuter sur chaque worker : swarm-worker1, worker2, worker3
 #
 # Usage : bash join-worker.sh <token> [ip-manager]
 # Exemple:
@@ -18,7 +18,7 @@ MANAGER_IP="${2:-192.168.56.10}"
 MANAGER_PORT="2377"
 
 if [ -z "$1" ]; then
-    echo "❌ Usage : bash join-worker.sh <token> [ip-manager]"
+    echo " Usage : bash join-worker.sh <token> [ip-manager]"
     echo ""
     echo "   Récupérer le token depuis swarm-manager :"
     echo "   docker swarm join-token worker"
@@ -36,17 +36,17 @@ echo ""
 # Vérifier qu'on n'est pas déjà dans un Swarm
 SWARM_STATE=$(docker info --format '{{.Swarm.LocalNodeState}}' 2>/dev/null || echo "inactive")
 if [ "$SWARM_STATE" = "active" ]; then
-    echo "⚠️  Ce nœud est déjà membre d'un Swarm."
+    echo " Ce nœud est déjà membre d'un Swarm."
     docker info --format 'Rôle : {{.Swarm.NodeID}}'
     exit 0
 fi
 
 # Jonction au Swarm
-echo "🐝 Jonction au Swarm..."
+echo " Jonction au Swarm..."
 docker swarm join --token "$TOKEN" "$MANAGER_IP:$MANAGER_PORT"
 
 echo ""
-echo "✅ $(hostname) a rejoint le Swarm en tant que worker !"
+echo " $(hostname) a rejoint le Swarm en tant que worker !"
 echo ""
-echo "ℹ️  Vérifier depuis swarm-manager :"
+echo " Vérifier depuis swarm-manager :"
 echo "   docker node ls"
