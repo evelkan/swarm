@@ -14,13 +14,13 @@ echo "🔧 Mise à jour de /etc/hosts..."
 
 # Vérifier si les entrées existent déjà
 if grep -q "$MARKER" "$HOSTS_FILE"; then
-    echo "⚠️  Les entrées du cluster sont déjà présentes dans $HOSTS_FILE."
+    echo " Les entrées du cluster sont déjà présentes dans $HOSTS_FILE."
     echo "   Contenu actuel :"
     grep -A6 "$MARKER" "$HOSTS_FILE"
     echo ""
     read -p "Voulez-vous les remplacer ? (o/N) : " CONFIRM
     if [[ "$CONFIRM" != "o" && "$CONFIRM" != "O" ]]; then
-        echo "⏭️  Annulé."
+        echo " Annulé."
         exit 0
     fi
     # Supprimer les anciennes entrées
@@ -38,6 +38,6 @@ sudo tee -a "$HOSTS_FILE" > /dev/null << 'EOF'
 192.168.56.20   swarm-nfs
 EOF
 
-echo "✅ /etc/hosts mis à jour :"
+echo " /etc/hosts mis à jour :"
 echo ""
 grep -A6 "$MARKER" "$HOSTS_FILE"
