@@ -10,7 +10,7 @@ set -e
 HOSTS_FILE="/etc/hosts"
 MARKER="# Cluster Docker Swarm"
 
-echo "🔧 Mise à jour de /etc/hosts..."
+echo " Mise à jour de /etc/hosts..."
 
 # Vérifier si les entrées existent déjà
 if grep -q "$MARKER" "$HOSTS_FILE"; then
