@@ -27,19 +27,19 @@ echo ""
 
 # Vérification
 if ! docker node ls &>/dev/null; then
-    echo "❌ Ce script doit être exécuté sur le manager Swarm."
+    echo " Ce script doit être exécuté sur le manager Swarm."
     exit 1
 fi
 
 # État initial
-echo "📊 État initial du cluster :"
+echo " État initial du cluster :"
 docker node ls
 echo ""
-echo "📊 État initial des services :"
+echo " État initial des services :"
 docker service ls
 echo ""
 
-echo "🔴 ÉTAPE 1 — Éteindre $TARGET_NODE"
+echo " ÉTAPE 1 — Éteindre $TARGET_NODE"
 echo "   Connectez-vous à $TARGET_NODE et exécutez :"
 echo "   sudo poweroff"
 echo ""
@@ -50,7 +50,7 @@ TIME_START=$(date '+%H:%M:%S')
 TS_START=$(date +%s)
 
 echo ""
-echo "👁️  Surveillance du cluster (toutes les ${WATCH_INTERVAL}s)..."
+echo "  Surveillance du cluster (toutes les ${WATCH_INTERVAL}s)..."
 echo ""
 
 NODE_DOWN=false
@@ -66,7 +66,7 @@ while [ "$ELAPSED" -lt "$TIMEOUT" ]; do
 
     if [ "$NODE_STATUS" = "Down" ] && [ "$NODE_DOWN" = false ]; then
         echo ""
-        echo "   ⚠️  [$( date '+%H:%M:%S')] $TARGET_NODE détecté comme Down par Swarm"
+        echo "     [$( date '+%H:%M:%S')] $TARGET_NODE détecté comme Down par Swarm"
         NODE_DOWN=true
     fi
 
@@ -87,28 +87,28 @@ echo ""
 echo ""
 echo "========================================"
 if [ "$SERVICES_RECOVERED" = true ]; then
-    echo "✅ Basculement automatique réussi !"
+    echo " Basculement automatique réussi !"
     echo ""
     echo "   Heure de la panne       : $TIME_START"
     echo "   Heure de reprise        : $TIME_END"
     echo "   RTO mesuré              : ~${RTO} secondes"
     echo "   Worker de basculement   : voir docker service ps $SERVICE"
 else
-    echo "⚠️  Timeout ou état inattendu — vérifier manuellement :"
+    echo " Timeout ou état inattendu — vérifier manuellement :"
     echo "   docker node ls"
     echo "   docker service ps $SERVICE"
 fi
 echo "========================================"
 echo ""
 
-echo "📊 État du cluster après panne :"
+echo " État du cluster après panne :"
 docker node ls
 echo ""
-echo "📊 Redistribution des services :"
+echo "Redistribution des services :"
 docker service ps "$SERVICE"
 
 echo ""
-echo "🔵 ÉTAPE 2 — Redémarrer $TARGET_NODE"
+echo " ÉTAPE 2 — Redémarrer $TARGET_NODE"
 echo "   Allumez la VM depuis VMware Workstation."
 echo "   Le nœud devrait réintégrer le cluster automatiquement."
 echo ""
