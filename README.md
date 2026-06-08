@@ -1,11 +1,11 @@
-# 🐳 Docker Swarm — Scripts d'infrastructure
+#  Docker Swarm — Scripts d'infrastructure
 
 > Projet réalisé dans le cadre d'un apprentissage DevOps à La Plateforme.  
 > Déploiement d'un cluster Docker Swarm haute disponibilité sur 5 VMs Debian 12 (VMware Workstation).
 
 ---
 
-## 📐 Architecture
+## Architecture
 
 | Rôle      | Hostname       | IP              | RAM   | CPU    | Disque |
 |-----------|----------------|-----------------|-------|--------|--------|
@@ -20,7 +20,7 @@
 
 ---
 
-## 📁 Structure du dépôt
+##  Structure du dépôt
 
 ```
 .
@@ -55,7 +55,7 @@
 
 ---
 
-## 🚀 Ordre de déploiement
+## 🚀Ordre de déploiement
 
 ```
 1. Cloner les VMs dans VMware (4 clones complets depuis swarm-manager)
@@ -69,7 +69,7 @@
 
 ---
 
-## 🔧 Services déployés
+## Services déployés
 
 | Service       | URL d'accès                    | Réplicas | Nœud    |
 |---------------|--------------------------------|----------|---------|
@@ -81,10 +81,10 @@
 
 ---
 
-## 📋 Résultats PCA/PRA
+##  Résultats PCA/PRA
 
 | Test   | Scénario                   | RTO         | Résultat            |
 |--------|----------------------------|-------------|---------------------|
-| Test 1 | Perte d'un conteneur Nginx | ~45 secondes| ✅ Redémarrage auto |
-| Test 2 | Perte d'un nœud Worker     | ~2 minutes  | ✅ Basculement auto |
-| Test 3 | Persistance données NFS    | —           | ✅ Données intactes |
+| Test 1 | Perte d'un conteneur Nginx | ~45 secondes| Redémarrage auto |
+| Test 2 | Perte d'un nœud Worker     | ~2 minutes  | Basculement auto |
+| Test 3 | Persistance données NFS    | —           | Données intactes |
