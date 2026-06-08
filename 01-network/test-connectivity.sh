@@ -55,4 +55,4 @@ if [ "$FAIL" -gt 0 ]; then
 fi
 
 echo ""
-echo "🎉 Tous les nœuds sont joignables — réseau Swarm opérationnel !"
+echo "Tous les nœuds sont joignables — réseau Swarm opérationnel !"
