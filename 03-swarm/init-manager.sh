@@ -63,5 +63,5 @@ echo " État du cluster :"
 docker node ls
 
 echo ""
-echo "▶️  Prochaine étape : exécuter join-worker.sh sur chaque worker"
+echo " Prochaine étape : exécuter join-worker.sh sur chaque worker"
 echo "   en copiant la commande 'docker swarm join --token ...' ci-dessus."
