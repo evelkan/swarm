@@ -76,4 +76,4 @@ echo " Vérification de l'IP attribuée :"
 ip addr show "$INTERFACE" | grep "inet "
 
 echo ""
-echo "✅ IP statique $STATIC_IP configurée sur $INTERFACE"
+echo " IP statique $STATIC_IP configurée sur $INTERFACE"
