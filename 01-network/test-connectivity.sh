@@ -21,10 +21,10 @@ ping_test() {
     local TARGET="$1"
     local LABEL="$2"
     if ping -c 2 -W 2 "$TARGET" &>/dev/null; then
-        echo "  ✅ $LABEL ($TARGET) — OK"
+        echo "  $LABEL ($TARGET) — OK"
         ((PASS++))
     else
-        echo "  ❌ $LABEL ($TARGET) — ÉCHEC"
+        echo "   $LABEL ($TARGET) — ÉCHEC"
         ((FAIL++))
     fi
 }
@@ -47,7 +47,7 @@ echo "========================================"
 
 if [ "$FAIL" -gt 0 ]; then
     echo ""
-    echo "💡 En cas d'échec, vérifier :"
+    echo " En cas d'échec, vérifier :"
     echo "   - La VM cible est bien démarrée"
     echo "   - L'IP statique est configurée sur ens34"
     echo "   - /etc/hosts est bien rempli sur cette VM"
