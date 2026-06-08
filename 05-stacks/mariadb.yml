@@ -1,0 +1,31 @@
+# =============================================================================
+# mariadb.yml — Stack Docker : Base de données MariaDB
+# =============================================================================
+# Base de données relationnelle avec persistance via NFS.
+# Les données survivent au redémarrage ou à la migration du conteneur.
+#
+# Déploiement : docker stack deploy -c mariadb.yml mariadb
+# Accès       : interne au cluster (port 3306)
+# =============================================================================
+
+version: '3.8'
+
+services:
+  mariadb:
+    image: mariadb:10.11
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: swarmdb
+      MYSQL_USER: swarmuser
+      MYSQL_PASSWORD: swarmpassword
+    volumes:
+      - /mnt/nfs/swarm/mariadb:/var/lib/mysql
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.role == worker
+      restart_policy:
+        condition: on-failure
+        delay: 10s
+        max_attempts: 3

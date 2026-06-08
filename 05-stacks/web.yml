@@ -1,0 +1,46 @@
+# =============================================================================
+# web.yml — Stack Docker : Nginx + PHP-FPM
+# =============================================================================
+# Nginx : reverse proxy / serveur web (2 réplicas pour haute disponibilité)
+# PHP   : moteur PHP-FPM pour l'exécution des scripts (2 réplicas)
+#
+# Prérequis NFS :
+#   /mnt/nfs/swarm/html  → fichiers web (index.php)
+#   /mnt/nfs/swarm/nginx → configuration Nginx (default.conf)
+#
+# Déploiement : docker stack deploy -c web.yml web
+# Accès Nginx : http://192.168.56.10  (port 80)
+# =============================================================================
+
+version: '3.8'
+
+services:
+
+  php:
+    image: php:8.2-fpm
+    volumes:
+      - /mnt/nfs/swarm/html:/var/www/html
+    deploy:
+      replicas: 2
+      placement:
+        constraints:
+          - node.role == worker
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+    volumes:
+      - /mnt/nfs/swarm/html:/var/www/html
+      - /mnt/nfs/swarm/nginx:/etc/nginx/conf.d
+    deploy:
+      replicas: 2
+      placement:
+        constraints:
+          - node.role == worker
+      restart_policy:
+        condition: on-failure
+        delay: 5s

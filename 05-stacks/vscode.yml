@@ -1,0 +1,31 @@
+# =============================================================================
+# vscode.yml — Stack Docker : VSCode Server
+# =============================================================================
+# Environnement de développement accessible depuis le navigateur.
+# Les fichiers du workspace sont stockés sur le NFS.
+#
+# Déploiement : docker stack deploy -c vscode.yml vscode
+# Accès       : http://192.168.56.11:8080
+# Mot de passe: vscode123
+# =============================================================================
+
+version: '3.8'
+
+services:
+  vscode:
+    image: codercom/code-server:latest
+    ports:
+      - "8080:8080"
+    volumes:
+      - /mnt/nfs/swarm/vscode:/home/coder
+    environment:
+      - PASSWORD=vscode123
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.role == worker
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3

@@ -1,0 +1,28 @@
+# =============================================================================
+# registry.yml — Stack Docker : Registry privé
+# =============================================================================
+# Dépôt d'images Docker interne au cluster.
+# Les images sont stockées sur le NFS pour garantir la persistance.
+#
+# Déploiement : docker stack deploy -c registry.yml registry
+# Accès       : http://192.168.56.10:5000
+# =============================================================================
+
+version: '3.8'
+
+services:
+  registry:
+    image: registry:2
+    ports:
+      - "5000:5000"
+    volumes:
+      - /mnt/nfs/swarm/registry:/var/lib/registry
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.role == manager
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3

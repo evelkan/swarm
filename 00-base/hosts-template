@@ -1,0 +1,9 @@
+127.0.0.1       localhost
+127.0.1.1       swarm-manager   # ← adapter selon la VM
+
+# Cluster Docker Swarm
+192.168.56.10   swarm-manager
+192.168.56.11   swarm-worker1
+192.168.56.12   swarm-worker2
+192.168.56.13   swarm-worker3
+192.168.56.20   swarm-nfs
