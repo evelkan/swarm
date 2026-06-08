@@ -19,7 +19,7 @@ INTERFACE="ens34"          # Carte Host-Only VMnet1
 NETMASK="255.255.255.0"
 
 if [ -z "$1" ]; then
-    echo "❌ Usage : sudo bash set-static-ip.sh <adresse-ip>"
+    echo " Usage : sudo bash set-static-ip.sh <adresse-ip>"
     echo ""
     echo "   swarm-manager  → 192.168.56.10"
     echo "   swarm-worker1  → 192.168.56.11"
@@ -31,11 +31,11 @@ fi
 
 STATIC_IP="$1"
 
-echo "🔧 Configuration de l'IP statique $STATIC_IP sur $INTERFACE..."
+echo " Configuration de l'IP statique $STATIC_IP sur $INTERFACE..."
 
 # Vérifier que l'interface existe
 if ! ip link show "$INTERFACE" &>/dev/null; then
-    echo "❌ Interface $INTERFACE introuvable."
+    echo " Interface $INTERFACE introuvable."
     echo "   Interfaces disponibles :"
     ip link show | grep -E "^[0-9]" | awk '{print "   -", $2}'
     exit 1
@@ -47,12 +47,12 @@ BACKUP_FILE="/etc/network/interfaces.bak"
 
 if [ ! -f "$BACKUP_FILE" ]; then
     sudo cp "$INTERFACES_FILE" "$BACKUP_FILE"
-    echo "📁 Sauvegarde créée : $BACKUP_FILE"
+    echo " Sauvegarde créée : $BACKUP_FILE"
 fi
 
 # Ajouter la configuration statique si elle n'existe pas déjà
 if grep -q "iface $INTERFACE inet static" "$INTERFACES_FILE"; then
-    echo "⚠️  Une configuration statique existe déjà pour $INTERFACE."
+    echo " Une configuration statique existe déjà pour $INTERFACE."
     echo "   Éditer manuellement $INTERFACES_FILE si nécessaire."
 else
     cat >> "$INTERFACES_FILE" << EOF
@@ -63,16 +63,16 @@ iface $INTERFACE inet static
     address $STATIC_IP
     netmask $NETMASK
 EOF
-    echo "✅ Configuration ajoutée dans $INTERFACES_FILE"
+    echo " Configuration ajoutée dans $INTERFACES_FILE"
 fi
 
 # Appliquer la configuration
-echo "🔄 Redémarrage du service réseau..."
+echo " Redémarrage du service réseau..."
 sudo systemctl restart networking
 
 # Vérification
 echo ""
-echo "📡 Vérification de l'IP attribuée :"
+echo " Vérification de l'IP attribuée :"
 ip addr show "$INTERFACE" | grep "inet "
 
 echo ""
