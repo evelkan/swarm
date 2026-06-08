@@ -26,37 +26,37 @@ echo "========================================"
 echo ""
 
 # 1. Installation du client NFS
-echo "📦 [1/4] Installation de nfs-common..."
+echo " [1/4] Installation de nfs-common..."
 sudo apt update
 sudo apt install -y nfs-common
 
 # 2. Vérification que le serveur NFS est joignable
-echo "🔍 [2/4] Vérification de la connexion au serveur NFS..."
+echo " [2/4] Vérification de la connexion au serveur NFS..."
 if ! ping -c 1 -W 2 "$NFS_SERVER" &>/dev/null; then
-    echo "❌ swarm-nfs ($NFS_SERVER) n'est pas joignable."
+    echo " swarm-nfs ($NFS_SERVER) n'est pas joignable."
     echo "   Vérifier : VM démarrée, IP configurée, /etc/hosts à jour."
     exit 1
 fi
-echo "   ✅ swarm-nfs est joignable."
+echo "    swarm-nfs est joignable."
 
 # 3. Création du point de montage
-echo "📁 [3/4] Création du point de montage $MOUNT_POINT..."
+echo " [3/4] Création du point de montage $MOUNT_POINT..."
 sudo mkdir -p "$MOUNT_POINT"
 
 # 4. Montage
-echo "🔗 [4/4] Montage du partage NFS..."
+echo " [4/4] Montage du partage NFS..."
 
 # Vérifier si déjà monté
 if mountpoint -q "$MOUNT_POINT"; then
-    echo "   ⚠️  $MOUNT_POINT est déjà monté."
+    echo "   $MOUNT_POINT est déjà monté."
 else
     sudo mount "$NFS_SERVER:$NFS_SHARE" "$MOUNT_POINT"
-    echo "   ✅ Montage effectué."
+    echo "   Montage effectué."
 fi
 
 # Vérification du montage
 echo ""
-echo "📊 Vérification :"
+echo " Vérification :"
 df -h | grep nfs
 
 # Persistance dans /etc/fstab
@@ -64,14 +64,14 @@ FSTAB_ENTRY="$NFS_SERVER:$NFS_SHARE $MOUNT_POINT nfs defaults 0 0"
 
 if grep -q "$NFS_SHARE" "$FSTAB_FILE"; then
     echo ""
-    echo "ℹ️  Une entrée NFS existe déjà dans /etc/fstab."
+    echo " Une entrée NFS existe déjà dans /etc/fstab."
 else
     echo "$FSTAB_ENTRY" | sudo tee -a "$FSTAB_FILE" > /dev/null
     echo ""
-    echo "✅ Entrée ajoutée dans /etc/fstab (montage permanent au démarrage)"
+    echo " Entrée ajoutée dans /etc/fstab (montage permanent au démarrage)"
 fi
 
 echo ""
 echo "========================================"
-echo "✅ NFS monté sur $(hostname) : $MOUNT_POINT"
+echo " NFS monté sur $(hostname) : $MOUNT_POINT"
 echo "========================================"
